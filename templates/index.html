@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ app_title }}</title>
+    <script src="/static/jquery-3.4.1.min.js"></script>
+    <script src="/static/bootstrap-4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/bootstrap-4.3.1/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container"><br/>
+    <h1>Search</h1>
+    <form type="POST" action="/">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Query" aria-label="Query"
+                   aria-describedby="button-search">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit" id="button-search">Search</button>
+            </div>
+        </div>
+    </form>
+    <div id="books" class="row">
+    </div>
+</div>
+</body>
+</html>
