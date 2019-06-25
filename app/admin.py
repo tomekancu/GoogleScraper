@@ -7,7 +7,7 @@ from .models import Query, Page
 
 class QueryAdmin(admin.ModelAdmin):
     list_display = ('query_text', 'user_ip', 'result_count', 'asked_date')
-    list_filter = ['asked_date', 'result_count']
+    list_filter = ['asked_date']
     search_fields = ['query_text']
 
 

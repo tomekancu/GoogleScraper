@@ -1,3 +1,5 @@
+{% load humanize %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,16 +13,56 @@
 <body>
 <div class="container"><br/>
     <h1>Search</h1>
-    <form type="POST" action="/">
+    <h4>{{ request.META.REMOTE_ADDR }}</h4>
+    <form method="POST" action="/query">
+        {% csrf_token %}
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Query" aria-label="Query"
-                   aria-describedby="button-search">
+            <input name="query" type="text" class="form-control" placeholder="Query"
+                   aria-label="Query"
+                   aria-describedby="button-search"
+                   required
+                   value="{{ q }}">
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="submit" id="button-search">Search</button>
             </div>
         </div>
     </form>
-    <div id="books" class="row">
+    <div class="row">
+        {% if query %}
+            <div class="col-md-8">
+                <h4>Results - {{ query.result_count | intcomma }}</h4>
+                <ul class="list-group list-group-flush">
+                    {% for page in query.get_ordered_pages %}
+                        <a href="{{ page.url }}" class="list-group-item list-group-item-action">
+                            <h5><b>{{ page.nr }} </b>{{ page.title }}</h5>
+                            <p class="mb-1">{{ page.destription }}</p>
+                        </a>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Statistics</h4>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Word</th>
+                        <th scope="col">Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for word, count in query.get_stats %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ word }}</td>
+                            <td>{{ count }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
     </div>
 </div>
 </body>

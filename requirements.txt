@@ -1,2 +1,5 @@
 Django==2.2.2
 requests-html==0.10.0
+requests==2.22.0
+selenium
+beautifulsoup4
