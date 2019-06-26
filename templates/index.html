@@ -13,7 +13,6 @@
 <body>
 <div class="container"><br/>
     <h1>Search</h1>
-    <h4>{{ request.META.REMOTE_ADDR }}</h4>
     <form method="POST" action="/query">
         {% csrf_token %}
         <div class="input-group mb-3">
