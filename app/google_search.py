@@ -8,7 +8,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 
-class Page:
+class GooglePageResult:
     def __init__(self, index: int, title: str, dest: str, url: str):
         self.index = index
         self.title = title
@@ -16,16 +16,16 @@ class Page:
         self.url = url
 
     def __str__(self) -> str:
-        return f"Page(i={self.index}, title={self.title}, dest={self.dest}, url={self.url})"
+        return f"GooglePageResult(i={self.index}, title={self.title}, dest={self.dest}, url={self.url})"
 
 
-class Result:
-    def __init__(self, result_count: int, results: List[Page]):
+class GoogleQueryResult:
+    def __init__(self, result_count: int, results: List[GooglePageResult]):
         self.result_count = result_count
         self.results = results
 
     def __str__(self) -> str:
-        return f"Results(count={self.result_count}, list={self.results})"
+        return f"GoogleQueryResult(count={self.result_count}, list={self.results})"
 
 
 class GoogleSearchClient:
@@ -59,7 +59,7 @@ class GoogleSearchClient:
         return self.get_results_from(soup)
 
     @staticmethod
-    def get_results_from(html: bs4.BeautifulSoup) -> Result:
+    def get_results_from(html: bs4.BeautifulSoup) -> GoogleQueryResult:
         result_stats = html.select_one("#resultStats")
         if result_stats is None:
             raise ValueError("no result stats in html")
@@ -85,6 +85,6 @@ class GoogleSearchClient:
             if destelements is None:
                 continue
             dest = destelements.get_text()
-            pages.append(Page(i + 1, title, dest, url))
+            pages.append(GooglePageResult(i + 1, title, dest, url))
 
-        return Result(result_count, pages)
+        return GoogleQueryResult(result_count, pages)

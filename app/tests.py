@@ -4,7 +4,8 @@ from django.utils import timezone
 import bs4
 
 from .models import Query, Page, get_query_for
-from .google_search import GoogleSearchClient, Result, Page as GPage
+from .google_search import GoogleSearchClient, GoogleQueryResult, GooglePageResult
+
 
 # Create your tests here.
 
@@ -32,10 +33,10 @@ class QuestionModelTests(TestCase):
 
     def test_download_results_bad_time(self):
         google_client = GoogleSearchClient()
-        google_client.get_results_for = MagicMock(return_value=Result(100_000, [
-            GPage(1, "Title 1", "Dest 1", "http://google.pl"),
-            GPage(1, "Title 2", "Dest 2", "http://google.pl"),
-            GPage(1, "Title 3", "Dest 3", "http://google.pl")
+        google_client.get_results_for = MagicMock(return_value=GoogleQueryResult(100_000, [
+            GooglePageResult(1, "Title 1", "Dest 1", "http://google.pl"),
+            GooglePageResult(1, "Title 2", "Dest 2", "http://google.pl"),
+            GooglePageResult(1, "Title 3", "Dest 3", "http://google.pl")
         ]))
 
         query = get_query_for("lion", "127.0.0.1", 60, google_client)
@@ -50,10 +51,10 @@ class QuestionModelTests(TestCase):
 
     def test_download_results_bad_ip(self):
         google_client = GoogleSearchClient()
-        google_client.get_results_for = MagicMock(return_value=Result(100_000, [
-            GPage(1, "Title 1", "Dest 1", "http://google.pl"),
-            GPage(1, "Title 2", "Dest 2", "http://google.pl"),
-            GPage(1, "Title 3", "Dest 3", "http://google.pl")
+        google_client.get_results_for = MagicMock(return_value=GoogleQueryResult(100_000, [
+            GooglePageResult(1, "Title 1", "Dest 1", "http://google.pl"),
+            GooglePageResult(1, "Title 2", "Dest 2", "http://google.pl"),
+            GooglePageResult(1, "Title 3", "Dest 3", "http://google.pl")
         ]))
 
         query = get_query_for("mamba2", "127.0.0.3", 1000, google_client)
@@ -68,7 +69,7 @@ class QuestionModelTests(TestCase):
 
     def test_database_results(self):
         google_client = GoogleSearchClient()
-        google_client.get_results_for = MagicMock(return_value=Result(100_000, []))
+        google_client.get_results_for = MagicMock(return_value=GoogleQueryResult(100_000, []))
 
         query = get_query_for("mamba", "127.0.0.1", 60, google_client)
 
