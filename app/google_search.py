@@ -1,13 +1,11 @@
-from django.conf import settings
+import re
+import urllib.parse
 from typing import List
-import requests_html as rh
-import requests
+
 import bs4
+from django.conf import settings
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import re
-import time
-import urllib.parse
 
 
 class Page:
@@ -32,11 +30,8 @@ class Result:
 
 class GoogleSearchClient:
 
-    def __init__(self, client: rh.BaseSession = None, user_agent: str = settings.USER_AGENT):
+    def __init__(self, user_agent: str = settings.USER_AGENT):
         self.user_agent = user_agent
-        if client is None:
-            client = rh.HTMLSession()
-        self.client = client
 
     def get_results_for(self, query: str):
         if query is None:
@@ -56,15 +51,10 @@ class GoogleSearchClient:
 
         # It can be a good idea to wait for a few seconds before trying to parse the page
         # to ensure that the page has loaded completely.
-        time.sleep(1)
+        browser.implicitly_wait(3)
 
-        # Parse HTML, close browser
         soup = bs4.BeautifulSoup(browser.page_source, 'html.parser')
-
-        # r: rh.HTMLResponse = self.client.get("https://www.google.pl/search", params={"q": query},
-        # headers=self.headers, timeout=60)
-        # r.html.render()
-        # soup = bs4.BeautifulSoup(r.html.raw_html, 'html.parser')
+        browser.quit()
 
         return self.get_results_from(soup)
 
